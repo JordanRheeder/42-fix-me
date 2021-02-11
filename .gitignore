@@ -1,0 +1,25 @@
+# Java-specific
+*.classpath
+*.project
+*.settings
+*.factorypath
+*.class
+*.jar
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+~$*
+*~
+
+# OS crap
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+._*
+
+# Project-specific
+target/
