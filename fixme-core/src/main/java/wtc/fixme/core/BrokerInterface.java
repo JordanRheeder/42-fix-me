@@ -1,4 +1,4 @@
-package Interfaces;
+package wtc.fixme.core;
 
 public interface BrokerInterface {
     String getID();

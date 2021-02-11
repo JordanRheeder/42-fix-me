@@ -1,4 +1,4 @@
-package broker.controller;
+package wtc.fixme.broker.controller;
 
 public class Instrument {
 }

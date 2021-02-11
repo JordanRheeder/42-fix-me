@@ -1,6 +1,6 @@
-package broker.controller;
+package wtc.fixme.broker.controller;
 
-import Interfaces.BrokerInterface;
+import wtc.fixme.core.BrokerInterface;
 
 public class Broker implements BrokerInterface {
 

@@ -1,4 +1,4 @@
-package market;
+package wtc.fixme.market;
 
 import java.io.BufferedReader;
 import java.io.IOException;
