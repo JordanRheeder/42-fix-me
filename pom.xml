@@ -8,7 +8,6 @@
     <artifactId>fixme</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-
     <modules>
         <module>fixme-core</module>
         <module>fixme-router</module>
