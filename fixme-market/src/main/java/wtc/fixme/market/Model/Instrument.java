@@ -1,9 +1,9 @@
-package wtc.fixme.core;
+package wtc.fixme.market.Instruments;
 
 public interface Instrument {
     // getters
     String getProductID();
-    String getSize();
+    String getProduct();
     int getAmountAvailable();
     int getPrice();
     boolean checkAlias(String request);
@@ -12,5 +12,5 @@ public interface Instrument {
     void setAmountAvailable(int value);
     void setPrice(int value);
     void setProductID(String value);
-    void setSize(String value);
+    void setProduct(String value);
 }
