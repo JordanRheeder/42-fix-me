@@ -13,7 +13,10 @@ public class Checksum {
     }
 
     public static Boolean Validate(String message) {
-        String checksum = message.substring(message.lastIndexOf("|"));
+        // get checksum out of message
+        String checksum = message.substring(message.lastIndexOf("|") + 1);
+        message = message.substring(0, message.lastIndexOf("|"));
+        // calculate checksum and return true if they are equal
         checksum = checksum.trim();
         return Calc(message).equals(checksum);
     }
