@@ -16,7 +16,7 @@ public class Connector extends Thread {
             try (ServerSocket serverSocket = new ServerSocket(listenPort)) {
                 Utils.printOut(listenPort, "Listening.");
 
-                new Echoer(serverSocket.accept()).start();
+                new Connection(listenPort, serverSocket.accept()).start();
                 Utils.printOut(listenPort, "Connected.");
 
             } catch (IOException e) {
