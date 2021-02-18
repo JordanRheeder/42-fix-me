@@ -9,13 +9,13 @@ import javax.xml.bind.DatatypeConverter;
 public class Checksum {
     public static String Add(String message) {
         String checksum = Calc(message);
-        return message + "|" + checksum;
+        return message + '|' + checksum;
     }
 
     public static Boolean Validate(String message) {
         // get checksum out of message
-        String checksum = message.substring(message.lastIndexOf("|") + 1);
-        message = message.substring(0, message.lastIndexOf("|"));
+        String checksum = message.substring(message.lastIndexOf('|') + 1);
+        message = message.substring(0, message.lastIndexOf('|'));
         // calculate checksum and return true if they are equal
         checksum = checksum.trim();
         return Calc(message).equals(checksum);
