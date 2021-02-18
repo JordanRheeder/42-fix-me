@@ -34,6 +34,9 @@ public class Connection extends Thread {
 
         try {
             BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
+
+            output.println(Checksum.Add("ASSIGN|" + clientId));
 
             while (true) {
                 String message = input.readLine();

@@ -32,6 +32,7 @@ public class Router {
     }
 
     public static void main(String args[]) {
+        System.out.println("[ROUTER] BOOT");
         targetMap = new HashMap<String, Socket>();
 
         new Connector(brokerPort).start();
