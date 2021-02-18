@@ -36,7 +36,7 @@ public class Broker {
             String response;
 
             do {
-                System.out.println("Enter string to be echoed: ");
+                System.out.println("Enter message to be sent: ");
                 echoString = scanner.nextLine();
 
                 if (!echoString.equals("exit")) {
@@ -45,7 +45,7 @@ public class Broker {
                     output.println(echoString);
 
                     response = input.readLine();
-                    System.out.println(response);
+                    System.out.println("Received: " + response);
                 }
             } while (!echoString.equals("exit"));
 

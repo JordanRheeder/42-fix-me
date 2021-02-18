@@ -7,40 +7,48 @@ import java.net.Socket;
 import wtc.fixme.core.Checksum;
 
 public class MessageProcessor {
-    private int sourcePort;
+    private int listenPort;
     private int targetPort;
+    private Socket socket;
 
-    public MessageProcessor(int sourcePort, int targetPort) {
-        this.sourcePort = sourcePort;
-        this.targetPort = targetPort;
+    public MessageProcessor(int listenPort, Socket socket) {
+        this.listenPort = listenPort;
+        this.targetPort = socket.getPort();
+        this.socket = socket;
     }
 
-    public void processMessage(String message) {
+    public void processMessage(String message) throws IOException {
+        PrintWriter fromOutput = new PrintWriter(socket.getOutputStream(), true);
+
         long pipeCount = message.chars().filter(ch -> ch == '|').count();
         if (pipeCount < 2) {
-            Utils.printOut(sourcePort, targetPort, "Invalid Message, aborting");
+            Utils.printOut(listenPort, targetPort, "Invalid Message, aborting");
+            fromOutput.println("Invalid Message (separator count)");
             return;
         }
 
         if (!Checksum.Validate(message)) {
-            Utils.printOut(sourcePort, targetPort, "Invalid Checksum, aborting");
+            Utils.printOut(listenPort, targetPort, "Invalid Checksum, aborting");
+            fromOutput.println("Invalid Checksum");
             return;
         }
 
         String targetID = message.substring(0, message.indexOf('|'));
         if (!Router.targetMap.containsKey(targetID)) {
-            Utils.printOut(sourcePort, targetPort, "TargetID \"" + targetID + "\" not found in map, aborting");
+            Utils.printOut(listenPort, targetPort, "TargetID \"" + targetID + "\" not found in map, aborting");
+            fromOutput.println("TargetID not found");
             return;
         }
 
         Socket destSocket = Router.targetMap.get(targetID);
-        Utils.printOut(sourcePort, targetPort, "Sending message \"" + message + "\" to " + destSocket.getPort());
+        Utils.printOut(listenPort, targetPort, "Sending message \"" + message + "\" to " + destSocket.getPort());
 
         try {
             PrintWriter output = new PrintWriter(destSocket.getOutputStream(), true);
             output.println(message);
         } catch (IOException e) {
-            Utils.printErr(sourcePort, targetPort, "Error sending message: " + e.getMessage());
+            Utils.printErr(listenPort, targetPort, "Error sending message: " + e.getMessage());
+            fromOutput.println("Error sending message: " + e.getMessage());
         }
     }
 }
