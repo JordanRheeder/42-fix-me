@@ -39,6 +39,7 @@ public class Connection extends Thread {
                 String message = input.readLine();
 
                 Utils.printOut(sourcePort, targetPort, "Got message: " + message);
+                new MessageProcessor(sourcePort, targetPort).processMessage(message);
             }
         } catch (IOException e) {
             Utils.printErr(sourcePort, targetPort, "Error reading from socket: " + e.getMessage());
