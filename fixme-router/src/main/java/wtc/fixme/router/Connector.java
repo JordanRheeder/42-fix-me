@@ -14,13 +14,13 @@ public class Connector extends Thread {
     public void run() {
         while (true) {
             try (ServerSocket serverSocket = new ServerSocket(listenPort)) {
-                System.out.println("Listening on port " + listenPort);
+                System.out.println("[" + listenPort + "] Listening.");
 
                 new Echoer(serverSocket.accept()).start();
-                System.out.println("Connected on port " + listenPort);
+                System.out.println("[" + listenPort + "] Connected.");
 
             } catch (IOException e) {
-                System.err.println("Could not connect: " + e.getMessage());
+                System.err.println("[" + listenPort + "] Could not connect: " + e.getMessage());
             }
         }
     }
