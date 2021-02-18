@@ -16,7 +16,6 @@ public class MessageProcessor {
     }
 
     public void processMessage(String message) {
-
         long pipeCount = message.chars().filter(ch -> ch == '|').count();
         if (pipeCount < 2) {
             Utils.printOut(sourcePort, targetPort, "Invalid Message, aborting");
@@ -37,7 +36,8 @@ public class MessageProcessor {
         Socket destSocket = Router.targetMap.get(targetID);
         Utils.printOut(sourcePort, targetPort, "Sending message \"" + message + "\" to " + destSocket.getPort());
 
-        try (PrintWriter output = new PrintWriter(destSocket.getOutputStream(), true)) {
+        try {
+            PrintWriter output = new PrintWriter(destSocket.getOutputStream(), true);
             output.println(message);
         } catch (IOException e) {
             Utils.printErr(sourcePort, targetPort, "Error sending message: " + e.getMessage());

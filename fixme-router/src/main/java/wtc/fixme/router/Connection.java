@@ -27,8 +27,8 @@ public class Connection extends Thread {
 
         Random r = new Random();
         int id = r.nextInt((999999 - 100000) + 1) + 100000;
-
         clientId = Integer.toString(id);
+
         Utils.printOut(sourcePort, targetPort, "Assigned client ID: " + clientId);
         Router.targetMap.put(clientId, socket);
 
@@ -39,6 +39,8 @@ public class Connection extends Thread {
                 String message = input.readLine();
 
                 Utils.printOut(sourcePort, targetPort, "Got message: " + message);
+                if (message == null)
+                    return;
                 new MessageProcessor(sourcePort, targetPort).processMessage(message);
             }
         } catch (IOException e) {
