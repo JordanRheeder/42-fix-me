@@ -40,6 +40,8 @@ public class Broker {
                 echoString = scanner.nextLine();
 
                 if (!echoString.equals("exit")) {
+                    echoString = Checksum.Add(echoString);
+                    System.out.println("Sending " + echoString);
                     output.println(echoString);
 
                     response = input.readLine();
