@@ -1,11 +1,19 @@
 package wtc.fixme.router;
 
 public class Utils {
-    public static String prefix(int listenPort) {
-        return "[" + listenPort + "] ";
+    public static void printOut(int listenPort, String message) {
+        System.out.println("[" + listenPort + "] " + message);
     }
 
-    public static String prefix(int listenPort, int targetPort) {
-        return "[" + listenPort + "=>" + targetPort + "] ";
+    public static void printOut(int listenPort, int targetPort, String message) {
+        System.out.println("[" + listenPort + "=>" + targetPort + "] " + message);
+    }
+
+    public static void printErr(int listenPort, String message) {
+        System.err.println("[" + listenPort + "] " + message);
+    }
+
+    public static void printErr(int listenPort, int targetPort, String message) {
+        System.err.println("[" + listenPort + "=>" + targetPort + "] " + message);
     }
 }

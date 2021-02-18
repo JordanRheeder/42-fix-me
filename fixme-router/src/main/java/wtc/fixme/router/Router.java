@@ -3,10 +3,14 @@ package wtc.fixme.router;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.Socket;
+import java.util.HashMap;
 
 public class Router {
     static int brokerPort = 5000;
     static int marketPort = 5001;
+
+    public static HashMap<String, Socket> targetMap;
 
     private static void readInput() {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
@@ -28,6 +32,8 @@ public class Router {
     }
 
     public static void main(String args[]) {
+        targetMap = new HashMap<String, Socket>();
+
         new Connector(brokerPort).start();
         new Connector(marketPort).start();
 
