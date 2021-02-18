@@ -7,32 +7,49 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Scanner;
 
+import wtc.fixme.core.Checksum;
+
 public class Broker {
-    private static final String ANSI_PURPLE = "\u001B[35m";
+    public static String clientID;
+
     public static void main(String[] args) {
+        System.out.println("[BROKER] BOOT");
         try (Socket socket = new Socket("localhost", 5000)) {
-            BufferedReader echoes = new BufferedReader(
-                    new InputStreamReader(socket.getInputStream()));
-            PrintWriter stringToEcho = new PrintWriter(socket.getOutputStream(), true);
+            System.out.println("Connected to port 5000 from port " + socket.getLocalPort());
+
+            BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
+
+            String assignMsg = input.readLine();
+            if (!Checksum.Validate(assignMsg)) {
+                System.err.println("Invalid checksum for ASSIGN message! Aborting");
+                return;
+            }
+
+            // remove checksum and ASSIGN| at the same time
+            assignMsg = assignMsg.substring(7, assignMsg.lastIndexOf('|'));
+            clientID = assignMsg;
+            System.out.println("Received clientID \"" + clientID + "\"");
 
             Scanner scanner = new Scanner(System.in);
             String echoString;
             String response;
 
             do {
-                System.out.println(ANSI_PURPLE + "Enter string to be echoed: ");
+                System.out.println("Enter string to be echoed: ");
                 echoString = scanner.nextLine();
 
-                stringToEcho.println(echoString);
-                if(!echoString.equals("exit")) {
-                    response = echoes.readLine();
+                if (!echoString.equals("exit")) {
+                    output.println(echoString);
+
+                    response = input.readLine();
                     System.out.println(response);
                 }
-            } while(!echoString.equals("exit"));
+            } while (!echoString.equals("exit"));
 
+            scanner.close();
         } catch (IOException e) {
-            System.out.println(ANSI_PURPLE + "Broker Client Error: " + e.getMessage());
-
+            System.out.println("Broker Client Error: " + e.getMessage());
         }
     }
 }
