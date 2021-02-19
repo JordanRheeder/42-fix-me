@@ -5,10 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Locale;
 import java.util.Scanner;
 
 import wtc.fixme.core.Checksum;
+import wtc.fixme.broker.controller.Validation;
 
 public class Broker {
     public static String clientID;
@@ -27,6 +27,7 @@ public class Broker {
 
     public static void main(String[] args) {
         String[] userInput = new String[4];
+        Validation validate = new Validation();
         System.out.println("[BROKER] BOOT");
         try (Socket socket = new Socket("localhost", 5000)) {
             System.out.println("Connected to port 5000 from port " + socket.getLocalPort());
@@ -58,7 +59,7 @@ public class Broker {
                 if (echoString.equals("buy")) {
                     //the first line in the message will be the broker ID
                     //this market id will either be to choose a market
-                    //or it will be rmoved
+                    //or it will be removed
                     System.out.println(ANSI_PURPLE + "Choose Market ID:");
                     userInput[0] = scanner.nextLine().toLowerCase();
                     System.out.println(ANSI_PURPLE + "Choose Item ID to purchase:");
@@ -67,17 +68,23 @@ public class Broker {
                     userInput[2] = scanner.nextLine().toLowerCase();
                     System.out.println(ANSI_PURPLE + "Choose price you'd like to purchase for:");
                     userInput[3] = scanner.nextLine().toLowerCase();
-                    sendBrokerReq(userInput, input, output);
+                    if (validate.validateInput(userInput))
+                        sendBrokerReq(userInput, input, output);
+                    else
+                        scanner.close();
                 } else if (echoString.equals("sell")) {
                     System.out.println("Choose Market ID:");
-                    String marketID = scanner.nextLine().toLowerCase();
+                    userInput[0] = scanner.nextLine().toLowerCase();
                     System.out.println("Choose item ID to sell:");
-                    String itemID = scanner.nextLine().toLowerCase();
+                    userInput[1] = scanner.nextLine().toLowerCase();
                     System.out.println("Choose amount you'd like to sell:");
-                    String saleAmount = scanner.nextLine().toLowerCase();
+                    userInput[2] = scanner.nextLine().toLowerCase();
                     System.out.println("Choose price you'd like to sell for:");
-                    String salePrice = scanner.nextLine().toLowerCase();
-                    System.out.println(ANSI_PURPLE + "fix format: " + marketID + " " + itemID + " " + saleAmount + " " + salePrice);
+                    userInput[3] = scanner.nextLine().toLowerCase();
+                    if (validate.validateInput(userInput))
+                        sendBrokerReq(userInput, input, output);
+                    else
+                        scanner.close();
                 } else if (echoString.equals("list")) {
                     sendMessage(output, "LIST");
 
