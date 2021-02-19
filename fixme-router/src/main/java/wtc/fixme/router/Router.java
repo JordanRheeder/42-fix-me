@@ -13,6 +13,16 @@ public class Router {
 
     public static HashMap<String, Socket> targetMap;
 
+    public static void main(String args[]) {
+        System.out.println("[ROUTER] BOOT");
+        targetMap = new HashMap<String, Socket>();
+
+        new Connector(brokerPort).start();
+        new Connector(marketPort).start();
+
+        readInput();
+    }
+
     private static void readInput() {
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
             while (true) {
@@ -38,15 +48,5 @@ public class Router {
         } catch (IOException e) {
             System.err.println("Could not read input: " + e.getMessage());
         }
-    }
-
-    public static void main(String args[]) {
-        System.out.println("[ROUTER] BOOT");
-        targetMap = new HashMap<String, Socket>();
-
-        new Connector(brokerPort).start();
-        new Connector(marketPort).start();
-
-        readInput();
     }
 }

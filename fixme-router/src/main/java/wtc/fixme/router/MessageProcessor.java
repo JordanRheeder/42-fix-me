@@ -18,25 +18,34 @@ public class MessageProcessor {
     }
 
     public void processMessage(String message) throws IOException {
-        PrintWriter fromOutput = new PrintWriter(socket.getOutputStream(), true);
-
-        long pipeCount = message.chars().filter(ch -> ch == '|').count();
-        if (pipeCount < 2) {
-            Utils.printOut(listenPort, targetPort, "Invalid Message, aborting");
-            fromOutput.println("Invalid Message (separator count)");
-            return;
-        }
+        PrintWriter srcOutput = new PrintWriter(socket.getOutputStream(), true);
 
         if (!Checksum.Validate(message)) {
             Utils.printOut(listenPort, targetPort, "Invalid Checksum, aborting");
-            fromOutput.println("Invalid Checksum");
+            srcOutput.println("Invalid Checksum");
             return;
         }
 
-        String targetID = message.substring(0, message.indexOf('|'));
+        String[] msgArr = message.split("\\|");
+
+        // srcID|LIST|checksum
+        if (msgArr.length == 3 && msgArr[1].equals("LIST")) {
+            Utils.printOut(listenPort, targetPort, "Market List requested, sending");
+            srcOutput.println("Listing markets");
+            return;
+        }
+
+        // srcID|targetID|message|checksum
+        if (msgArr.length < 4) {
+            Utils.printOut(listenPort, targetPort, "Invalid Message, aborting");
+            srcOutput.println("Invalid Message (separator count)");
+            return;
+        }
+
+        String targetID = msgArr[1];
         if (!Router.targetMap.containsKey(targetID)) {
             Utils.printOut(listenPort, targetPort, "TargetID \"" + targetID + "\" not found in map, aborting");
-            fromOutput.println("TargetID not found");
+            srcOutput.println("TargetID not found");
             return;
         }
 
@@ -48,7 +57,7 @@ public class MessageProcessor {
             output.println(message);
         } catch (IOException e) {
             Utils.printErr(listenPort, targetPort, "Error sending message: " + e.getMessage());
-            fromOutput.println("Error sending message: " + e.getMessage());
+            srcOutput.println("Error sending message: " + e.getMessage());
         }
     }
 }
