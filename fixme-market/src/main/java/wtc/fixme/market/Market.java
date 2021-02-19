@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.Scanner;
 
 import wtc.fixme.core.Checksum;
 
@@ -26,7 +25,7 @@ public class Market {
                 return;
             }
 
-            // remove checkssum and ASSIGN| at the same time
+            // remove checksum and ASSIGN| at the same time
             assignMsg = assignMsg.substring(7, assignMsg.lastIndexOf('|'));
             clientID = assignMsg;
             System.out.println("Received clientID \"" + clientID + "\"");
@@ -58,8 +57,10 @@ public class Market {
     }
 
     private static void processMessage(String message, PrintWriter output) {
-        if (!message.contains("|"))
+        if (!message.contains("|")) {
+            System.out.println("No separator, could not get returnID");
             return;
+        }
 
         // srcID|targetID|message|checksum
         String[] msgArr = message.split("\\|");
