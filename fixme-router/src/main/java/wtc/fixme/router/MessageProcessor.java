@@ -3,6 +3,7 @@ package wtc.fixme.router;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Map;
 
 import wtc.fixme.core.Checksum;
 
@@ -31,7 +32,7 @@ public class MessageProcessor {
         // srcID|LIST|checksum
         if (msgArr.length == 3 && msgArr[1].equals("LIST")) {
             Utils.printOut(listenPort, targetPort, "Market List requested, sending");
-            srcOutput.println("Listing markets");
+            srcOutput.println(Checksum.Add(getMarkets()));
             return;
         }
 
@@ -59,5 +60,21 @@ public class MessageProcessor {
             Utils.printErr(listenPort, targetPort, "Error sending message: " + e.getMessage());
             srcOutput.println("Error sending message: " + e.getMessage());
         }
+    }
+
+    public String getMarkets() {
+        String rtn = "";
+        for (Map.Entry<String, Socket> entry : Router.targetMap.entrySet()) {
+            //                        only get markets
+            if (entry.getValue().getLocalPort() == Router.marketPort) {
+                if (rtn.equals("")) {
+                    rtn = entry.getKey();
+                } else {
+                    rtn += "|" + entry.getKey();
+                }
+            }
+        }
+
+        return rtn;
     }
 }
