@@ -15,6 +15,14 @@ public class Broker {
     private static Boolean exitCase;
     private static final String ANSI_PURPLE = "\u001B[35m";
 
+    private static void sendMessage(PrintWriter output, String message) {
+        message = clientID + "|" + message;
+        message = Checksum.Add(message);
+
+        System.out.println("Sending " + message);
+        output.println(message);
+    }
+
     public static void main(String[] args) {
         System.out.println("[BROKER] BOOT");
         try (Socket socket = new Socket("localhost", 5000)) {
@@ -38,7 +46,6 @@ public class Broker {
             String echoString;
             String response;
 
-
             do {
                 exitCase = false;
 
@@ -55,7 +62,7 @@ public class Broker {
                     System.out.println(ANSI_PURPLE + "Choose price you'd like to purchase for:");
                     String purchasePrice = scanner.nextLine().toLowerCase();
                     System.out.println(ANSI_PURPLE + "fix format: " + marketID + " " + itemID + " " + purchaseAmount + " " + purchasePrice);
-                } else if  (echoString.equals("sell")) {
+                } else if (echoString.equals("sell")) {
                     System.out.println("Choose Market ID:");
                     String marketID = scanner.nextLine().toLowerCase();
                     System.out.println("Choose item ID to sell:");
@@ -66,18 +73,14 @@ public class Broker {
                     String salePrice = scanner.nextLine().toLowerCase();
                     System.out.println(ANSI_PURPLE + "fix format: " + marketID + " " + itemID + " " + saleAmount + " " + salePrice);
                 } else if (echoString.equals("list")) {
-                    echoString = clientID + "|" + "LIST";
-                    echoString = Checksum.Add(echoString);
-
-                    System.out.println("Sending " + echoString);
-                    output.println(echoString);
+                    sendMessage(output, "LIST");
 
                     response = input.readLine();
                     System.out.println("Received: " + response);
                 } else if (echoString.equals("goods")) {
                     System.out.println("TODO: List goods");
                 }
-            } while(!"exit".equals(echoString));
+            } while (!"exit".equals(echoString));
 
             scanner.close();
         } catch (IOException e) {
