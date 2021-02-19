@@ -8,15 +8,31 @@ import java.net.Socket;
 import java.util.Locale;
 import java.util.Scanner;
 
-public class Broker {
+import wtc.fixme.core.Checksum;
 
+public class Broker {
+    public static String clientID;
     private static Boolean exitCase;
     private static final String ANSI_PURPLE = "\u001B[35m";
+
     public static void main(String[] args) {
+        System.out.println("[BROKER] BOOT");
         try (Socket socket = new Socket("localhost", 5000)) {
-            BufferedReader echoes = new BufferedReader(
-                    new InputStreamReader(socket.getInputStream()));
-            PrintWriter stringToEcho = new PrintWriter(socket.getOutputStream(), true);
+            System.out.println("Connected to port 5000 from port " + socket.getLocalPort());
+
+            BufferedReader input = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter output = new PrintWriter(socket.getOutputStream(), true);
+
+            String assignMsg = input.readLine();
+            if (!Checksum.Validate(assignMsg)) {
+                System.err.println("Invalid checksum for ASSIGN message! Aborting");
+                return;
+            }
+
+            // remove checksum and ASSIGN| at the same time
+            assignMsg = assignMsg.substring(7, assignMsg.lastIndexOf('|'));
+            clientID = assignMsg;
+            System.out.println("Received clientID \"" + clientID + "\"");
 
             Scanner scanner = new Scanner(System.in);
             String echoString;
@@ -50,15 +66,22 @@ public class Broker {
                     String salePrice = scanner.nextLine().toLowerCase();
                     System.out.println(ANSI_PURPLE + "fix format: " + marketID + " " + itemID + " " + saleAmount + " " + salePrice);
                 } else if (echoString.equals("list")) {
-                    System.out.println("TODO: List markets");
+                    echoString = clientID + "|" + "LIST";
+                    echoString = Checksum.Add(echoString);
+
+                    System.out.println("Sending " + echoString);
+                    output.println(echoString);
+
+                    response = input.readLine();
+                    System.out.println("Received: " + response);
                 } else if (echoString.equals("goods")) {
                     System.out.println("TODO: List goods");
                 }
             } while(!"exit".equals(echoString));
 
+            scanner.close();
         } catch (IOException e) {
             System.out.println(ANSI_PURPLE + "Broker Client Error: " + e.getMessage());
-
         }
     }
 }
