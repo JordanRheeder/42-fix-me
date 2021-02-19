@@ -65,7 +65,7 @@ public class MessageProcessor {
     public String getMarkets() {
         String rtn = "";
         for (Map.Entry<String, Socket> entry : Router.targetMap.entrySet()) {
-            //                        only get markets
+            // only get markets
             if (entry.getValue().getLocalPort() == Router.marketPort) {
                 if (rtn.equals("")) {
                     rtn = entry.getKey();
