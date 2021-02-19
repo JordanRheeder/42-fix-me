@@ -57,12 +57,8 @@ public class Broker {
                 echoString = scanner.nextLine().toLowerCase();
 
                 if (echoString.equals("buy")) {
-                    //the first line in the message will be the broker ID
-                    //this market id will either be to choose a market
-                    //or it will be removed
-                    System.out.println(ANSI_PURPLE + "Choose Market ID:");
-                    userInput[0] = scanner.nextLine().toLowerCase();
-                    System.out.println(ANSI_PURPLE + "Choose Item ID to purchase:");
+                    userInput[0] = "buy";
+                    System.out.println(ANSI_PURPLE + "Which stonks would you like to purchase ?");
                     userInput[1] = scanner.nextLine().toLowerCase();
                     System.out.println(ANSI_PURPLE + "Choose amount you'd like to purchase:");
                     userInput[2] = scanner.nextLine().toLowerCase();
@@ -73,9 +69,8 @@ public class Broker {
                     else
                         scanner.close();
                 } else if (echoString.equals("sell")) {
-                    System.out.println("Choose Market ID:");
-                    userInput[0] = scanner.nextLine().toLowerCase();
-                    System.out.println("Choose item ID to sell:");
+                    userInput[0] = "sell";
+                    System.out.println("Which stonks would you like to sell?");
                     userInput[1] = scanner.nextLine().toLowerCase();
                     System.out.println("Choose amount you'd like to sell:");
                     userInput[2] = scanner.nextLine().toLowerCase();
@@ -104,17 +99,13 @@ public class Broker {
     }
 
     private static void sendBrokerReq(String[] req, BufferedReader input, PrintWriter output) throws IOException{
-        //create a fix messages using array with users input
-        //msg will then equal that fix message but for no it will equal a concatenated string
-
-        String msg = String.join(" | ", req);
+        String msg = String.join("|", req);
+        sendMessage(output, msg);
 
         if (msg != null) {
             System.out.println("Order: " + msg);
 
             try {
-                output.println(msg);
-
                 String fromRouter = input.readLine();
 
                 if (fromRouter != null) {
@@ -128,7 +119,6 @@ public class Broker {
             }catch (IOException e) {
                 System.out.println(ANSI_RED + "\nUnable to communicate with the server. Please try again!\n");
             }
-            //this else will be more useful when we can turn input into fix msgs
         } else {
             System.out.println(ANSI_RED + "FIX message could not be created! Please try again");
         }

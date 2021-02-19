@@ -5,11 +5,16 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 import wtc.fixme.core.Checksum;
+import wtc.fixme.market.Instruments.Stonks;
+import wtc.fixme.market.Instruments.StockMarket;
 
 public class Market {
     public static String clientID;
+    public List<Stonks> stonks = new ArrayList<Stonks>();
 
     public static void main(String[] args) {
         System.out.println("[MARKET] BOOT");
@@ -77,5 +82,16 @@ public class Market {
         }
 
         sendResponse(msgArr[0], "HERE'S YOUR RESPONSE", output);
+
+        if (message.contains("buy") || message.contains("sell")) {
+            if (msgArr[2].equals("Game Stop") || msgArr[2].equals("Tesla") || msgArr[2].equals("Amazon") ||
+            msgArr[2].equals("Apple") || msgArr[2].equals("Microsoft") || msgArr[2].equals("Netflix")) {
+                if (Integer.parseInt(msgArr[3]) <= 500) {
+                    if (Integer.parseInt(msgArr[4]) >= 1000) {
+                        sendResponse(msgArr[0], "Approved", output);
+                    } else sendResponse(msgArr[0], "Rejected", output);
+                } else sendResponse(msgArr[0], "Rejected", output);
+            } else sendResponse(msgArr[0], "Rejected", output);
+        }
     }
 }

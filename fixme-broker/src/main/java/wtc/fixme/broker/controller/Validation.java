@@ -11,8 +11,8 @@ public class Validation {
                 System.out.println(ANSI_RED + "Please enter the correct amount of parameters");
                 return false;
             }
-            if (!validateNumber(input[0].trim()) || !validateNumber(input[1].trim()) || !validateNumber(input[2].trim()) || !validateNumber(input[3].trim())) {
-                System.out.println(ANSI_RED + "Make sure your input is numerical");
+            if (!validateString(input[0].trim()) || !validateString(input[1].trim()) || !validateNumber(input[2].trim()) || !validateNumber(input[3].trim())) {
+                System.out.println(ANSI_RED + "Make sure your input format is correct");
                 return false;
             }
             if (Integer.parseInt(input[2].trim()) <= 0) {
@@ -36,6 +36,19 @@ public class Validation {
     private boolean validateNumber(String str) {
         for (int i = 0; i < str.length(); i++) {
             if (!Character.isDigit(str.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean validateString(String str) {
+
+        str = str.toLowerCase();
+        char[] charArray = str.toCharArray();
+
+        for (char ch : charArray) {
+            if (!(ch >= 'a' && ch <= 'z')  && (ch != ' ')) {
                 return false;
             }
         }
