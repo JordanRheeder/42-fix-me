@@ -7,19 +7,20 @@ public class Validation {
 
     public boolean validateInput(String[] input) {
         try {
-            if (input.length != 4) {
+            if (input.length != 5) {
                 System.out.println(ANSI_RED + "Please enter the correct amount of parameters");
                 return false;
             }
-            if (!validateString(input[0].trim()) || !validateString(input[1].trim()) || !validateNumber(input[2].trim()) || !validateNumber(input[3].trim())) {
+            if (!validateString(input[0].trim()) || !validateNumber(input[1].trim()) || !validateString(input[2].trim()) || !validateNumber(input[3].trim()) ||
+            !validateNumber(input[4].trim())) {
                 System.out.println(ANSI_RED + "Make sure your input format is correct");
                 return false;
             }
-            if (Integer.parseInt(input[2].trim()) <= 0) {
+            if (Integer.parseInt(input[3].trim()) <= 0) {
                 System.out.println("Order amount needs to be greater than 0");
                 return false;
             }
-            if (Integer.parseInt(input[3].trim()) <= 0) {
+            if (Integer.parseInt(input[4].trim()) <= 0) {
                 System.out.print("Purchase price needs to be greater than 0");
                 return false;
             }

@@ -43,7 +43,7 @@ public class MessageProcessor {
             return;
         }
 
-        String targetID = msgArr[1];
+        String targetID = msgArr[2];
         if (!Router.targetMap.containsKey(targetID)) {
             Utils.printOut(listenPort, targetPort, "TargetID \"" + targetID + "\" not found in map, aborting");
             srcOutput.println("TargetID not found");

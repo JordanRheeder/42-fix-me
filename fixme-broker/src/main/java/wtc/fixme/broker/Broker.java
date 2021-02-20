@@ -26,7 +26,7 @@ public class Broker {
     }
 
     public static void main(String[] args) {
-        String[] userInput = new String[4];
+        String[] userInput = new String[5];
         Validation validate = new Validation();
         System.out.println("[BROKER] BOOT");
         try (Socket socket = new Socket("localhost", 5000)) {
@@ -58,24 +58,28 @@ public class Broker {
 
                 if (echoString.equals("buy")) {
                     userInput[0] = "buy";
-                    System.out.println(ANSI_PURPLE + "Which stonks would you like to purchase ?");
+                    System.out.println("Enter the ID of the available market");
                     userInput[1] = scanner.nextLine().toLowerCase();
-                    System.out.println(ANSI_PURPLE + "Choose amount you'd like to purchase:");
+                    System.out.println(ANSI_PURPLE + "Which stonks would you like to purchase ?");
                     userInput[2] = scanner.nextLine().toLowerCase();
-                    System.out.println(ANSI_PURPLE + "Choose price you'd like to purchase for:");
+                    System.out.println(ANSI_PURPLE + "Choose amount you'd like to purchase:");
                     userInput[3] = scanner.nextLine().toLowerCase();
+                    System.out.println(ANSI_PURPLE + "Choose price you'd like to purchase for:");
+                    userInput[4] = scanner.nextLine().toLowerCase();
                     if (validate.validateInput(userInput))
                         sendBrokerReq(userInput, input, output);
                     else
                         scanner.close();
                 } else if (echoString.equals("sell")) {
                     userInput[0] = "sell";
-                    System.out.println("Which stonks would you like to sell?");
+                    System.out.println("Enter the ID of the available market");
                     userInput[1] = scanner.nextLine().toLowerCase();
-                    System.out.println("Choose amount you'd like to sell:");
+                    System.out.println("Which stonks would you like to sell?");
                     userInput[2] = scanner.nextLine().toLowerCase();
-                    System.out.println("Choose price you'd like to sell for:");
+                    System.out.println("Choose amount you'd like to sell:");
                     userInput[3] = scanner.nextLine().toLowerCase();
+                    System.out.println("Choose price you'd like to sell for:");
+                    userInput[4] = scanner.nextLine().toLowerCase();
                     if (validate.validateInput(userInput))
                         sendBrokerReq(userInput, input, output);
                     else

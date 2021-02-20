@@ -48,13 +48,13 @@ public class Market {
         }
     }
 
-    private static void sendResponse(String returnID, String message, PrintWriter output) {
+    private static void sendResponse(String message, String returnID, PrintWriter output) {
         if (returnID == null)
             return;
         if (message == null)
             return;
 
-        message = clientID + "|" + returnID + "|" + message;
+        message = clientID + "|" + message + "|" + returnID;
         message = Checksum.Add(message);
 
         System.out.println("Sending Message \"" + message + "\"");
@@ -72,26 +72,25 @@ public class Market {
 
         if (!Checksum.Validate(message)) {
             System.out.println("Invalid Checksum");
-            sendResponse(msgArr[0], "Invalid Checksum", output);
+            sendResponse( "Invalid Checksum", msgArr[0],  output);
             return;
         }
 
         if (msgArr.length < 4) {
             System.out.println("Invalid Message");
-            sendResponse(msgArr[0], "Invalid Message (separator count)", output);
+            sendResponse( "Invalid Message (separator count)", msgArr[0], output);
         }
 
-        sendResponse(msgArr[0], "HERE'S YOUR RESPONSE", output);
 
         if (message.contains("buy") || message.contains("sell")) {
-            if (msgArr[2].equals("Game Stop") || msgArr[2].equals("Tesla") || msgArr[2].equals("Amazon") ||
-            msgArr[2].equals("Apple") || msgArr[2].equals("Microsoft") || msgArr[2].equals("Netflix")) {
-                if (Integer.parseInt(msgArr[3]) <= 500) {
-                    if (Integer.parseInt(msgArr[4]) >= 1000) {
-                        sendResponse(msgArr[0], "Approved", output);
-                    } else sendResponse(msgArr[0], "Rejected", output);
-                } else sendResponse(msgArr[0], "Rejected", output);
-            } else sendResponse(msgArr[0], "Rejected", output);
+            if (msgArr[3].equals("game stop") || msgArr[3].equals("tesla") || msgArr[3].equals("amazon") ||
+            msgArr[3].equals("apple") || msgArr[3].equals("microsoft") || msgArr[3].equals("netflix")) {
+                if (Integer.parseInt(msgArr[4]) <= 500) {
+                    if (Integer.parseInt(msgArr[5]) >= 1000) {
+                        sendResponse("Accepted", msgArr[0], output);
+                    } else sendResponse("Rejected 1", msgArr[0], output);
+                } else sendResponse("Rejected", msgArr[0], output);
+            } else sendResponse("Rejected", msgArr[0], output);
         }
     }
 }
